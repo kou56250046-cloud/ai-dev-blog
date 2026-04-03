@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm add:*)",
+      "Bash(pnpm install:*)",
+      "Bash(npm install:*)",
+      "Bash(export PATH=\"$HOME/AppData/Roaming/npm:$PATH\")",
+      "Bash(echo \"EXIT: $?\")",
+      "Bash(npx astro:*)"
+    ]
+  }
+}

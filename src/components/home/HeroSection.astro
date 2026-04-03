@@ -1,0 +1,98 @@
+---
+---
+
+<section class="relative min-h-[90vh] flex items-center overflow-hidden" style="background: var(--gradient-bg)">
+  <!-- 波形SVGアニメーション -->
+  <div class="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+    <svg
+      class="absolute bottom-0 left-0 right-0 w-full"
+      viewBox="0 0 1440 320"
+      preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path class="wave wave-1" fill="rgba(165,180,252,0.3)" d="M0,192L48,186.7C96,181,192,171,288,181.3C384,192,480,224,576,218.7C672,213,768,171,864,160C960,149,1056,171,1152,186.7C1248,203,1344,213,1392,218.7L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"/>
+      <path class="wave wave-2" fill="rgba(196,181,253,0.2)" d="M0,256L48,245.3C96,235,192,213,288,213.3C384,213,480,235,576,234.7C672,235,768,213,864,202.7C960,192,1056,203,1152,218.7C1248,235,1344,256,1392,266.7L1440,277L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"/>
+      <path class="wave wave-3" fill="rgba(147,197,253,0.15)" d="M0,288L48,277.3C96,267,192,245,288,250.7C384,256,480,288,576,282.7C672,277,768,235,864,229.3C960,224,1056,256,1152,261.3C1248,267,1344,245,1392,234.7L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"/>
+    </svg>
+
+    <!-- 浮遊オーブ -->
+    <div class="orb orb-1" style="background: var(--gradient-accent)"></div>
+    <div class="orb orb-2" style="background: var(--gradient-wave)"></div>
+  </div>
+
+  <!-- コンテンツ -->
+  <div class="relative z-10 max-w-6xl mx-auto px-6 py-24">
+    <div class="hero-content max-w-3xl">
+      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 backdrop-blur-sm text-sm text-accent font-medium mb-8 border border-accent/20">
+        <span class="w-2 h-2 bg-accent rounded-full animate-pulse"></span>
+        AI駆動開発の学習ナレッジベース
+      </div>
+
+      <h1 class="text-5xl md:text-7xl font-bold text-text-main leading-tight mb-6">
+        <span class="block">Learn.</span>
+        <span class="block" style="background: var(--gradient-accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+          Build.
+        </span>
+        <span class="block">Repeat.</span>
+      </h1>
+
+      <p class="text-xl text-text-muted leading-relaxed mb-10 max-w-xl">
+        Claude Code・Devin・GitHub等を使ったAI駆動開発の学習ログ、チートシート、コードスニペットを記録・共有します。
+      </p>
+
+      <div class="flex flex-wrap gap-4">
+        <a href="/blog" class="btn-primary">
+          記事を読む
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <a href="/cheatsheet" class="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-accent border border-accent/30 bg-white/60 backdrop-blur-sm hover:bg-white transition-all duration-300">
+          チートシートを見る
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .wave {
+    animation: wave-move 8s ease-in-out infinite;
+    transform-origin: center bottom;
+  }
+  .wave-2 { animation-duration: 10s; animation-delay: -2s; }
+  .wave-3 { animation-duration: 12s; animation-delay: -4s; }
+
+  @keyframes wave-move {
+    0%, 100% { transform: translateX(0) scaleY(1); }
+    50%       { transform: translateX(-30px) scaleY(1.05); }
+  }
+
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    animation: float 12s ease-in-out infinite;
+  }
+  .orb-1 {
+    width: 400px; height: 400px;
+    top: -100px; right: -100px;
+  }
+  .orb-2 {
+    width: 300px; height: 300px;
+    bottom: 50px; left: 10%;
+    animation-delay: -6s;
+    animation-duration: 15s;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33%       { transform: translate(30px, -20px) scale(1.05); }
+    66%       { transform: translate(-20px, 20px) scale(0.95); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .wave, .orb { animation: none; }
+  }
+</style>

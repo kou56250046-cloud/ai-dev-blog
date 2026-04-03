@@ -1,0 +1,49 @@
+---
+import TagBadge from './TagBadge.astro';
+import { formatDateShort } from '@/utils/date';
+
+interface Props {
+  title:    string;
+  summary:  string;
+  date:     Date;
+  tags:     string[];
+  href:     string;
+  category: string;
+}
+
+const { title, summary, date, tags, href, category } = Astro.props;
+
+const categoryIcon: Record<string, string> = {
+  blog:       '📝',
+  cheatsheet: '⚡',
+  snippet:    '🧩',
+  design:     '🏗️',
+  roadmap:    '🗺️',
+};
+---
+
+<article class="card group">
+  <a href={href} class="block">
+    <div class="flex items-center gap-2 text-xs text-text-muted mb-3">
+      <span>{categoryIcon[category] ?? '📄'}</span>
+      <span class="capitalize">{category}</span>
+      <span>·</span>
+      <time datetime={date.toISOString()}>{formatDateShort(date)}</time>
+    </div>
+
+    <h2 class="text-lg font-bold text-text-main group-hover:text-accent transition-colors mb-2 line-clamp-2">
+      {title}
+    </h2>
+
+    <p class="text-sm text-text-muted leading-relaxed line-clamp-3 mb-4">
+      {summary}
+    </p>
+  </a>
+
+  <div class="flex flex-wrap gap-1.5">
+    {tags.slice(0, 3).map(tag => <TagBadge tag={tag} />)}
+    {tags.length > 3 && (
+      <span class="tag-badge opacity-60">+{tags.length - 3}</span>
+    )}
+  </div>
+</article>

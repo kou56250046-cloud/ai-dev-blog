@@ -1,0 +1,35 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('roadmap', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+
+<PageLayout
+  title="ロードマップ"
+  heading="🗺️ ロードマップ"
+  subheading="学習進捗管理"
+>
+  {posts.length > 0 ? (
+    <div class="max-w-3xl">
+      {posts.map(async (post) => {
+        const { Content } = await post.render();
+        return (
+          <div class="prose">
+            <Content />
+          </div>
+        );
+      })}
+    </div>
+  ) : (
+    <div class="text-center py-20 text-text-muted">
+      <p class="text-5xl mb-4">🗺️</p>
+      <p>ロードマップはまだありません。</p>
+    </div>
+  )}
+</PageLayout>
+
+<style is:global>
+  @import '../styles/prose.css';
+</style>

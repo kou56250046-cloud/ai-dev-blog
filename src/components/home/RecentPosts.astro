@@ -1,0 +1,64 @@
+---
+import ArticleCard from '@/components/ui/ArticleCard.astro';
+import { getRecentPosts } from '@/utils/content';
+
+const posts = await getRecentPosts(6);
+---
+
+<section class="py-24 max-w-6xl mx-auto px-6">
+  <div class="flex items-end justify-between mb-12">
+    <div>
+      <p class="text-sm text-accent font-medium mb-2">RECENT POSTS</p>
+      <h2 class="text-3xl font-bold text-text-main">最新の記事</h2>
+    </div>
+    <a href="/blog" class="text-sm text-text-muted hover:text-accent transition-colors">
+      すべて見る →
+    </a>
+  </div>
+
+  {posts.length > 0 ? (
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="posts-grid">
+      {posts.map(post => (
+        <ArticleCard
+          title={post.data.title}
+          summary={post.data.summary}
+          date={post.data.date}
+          tags={post.data.tags}
+          href={`/${post.collection}/${post.slug}`}
+          category={post.collection}
+        />
+      ))}
+    </div>
+  ) : (
+    <div class="text-center py-20 text-text-muted">
+      <p class="text-5xl mb-4">📝</p>
+      <p class="text-lg">まだ記事がありません。最初の記事を書きましょう！</p>
+    </div>
+  )}
+</section>
+
+<script>
+  // GSAP スクロールアニメーション
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const cards = document.querySelectorAll('#posts-grid article');
+  if (cards.length > 0) {
+    gsap.fromTo(cards,
+      { opacity: 0, y: 30 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '#posts-grid',
+          start: 'top 80%',
+        }
+      }
+    );
+  }
+</script>

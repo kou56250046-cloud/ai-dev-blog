@@ -1,0 +1,29 @@
+# 依存関係
+node_modules/
+
+# ビルド出力
+dist/
+.astro/
+
+# 環境変数
+.env
+.env.local
+.env.*.local
+
+# エディタ
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ログ
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*

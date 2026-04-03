@@ -1,0 +1,47 @@
+/* Markdownコンテンツスタイル */
+.prose {
+  @apply max-w-3xl mx-auto;
+  font-family: 'Noto Sans JP', sans-serif;
+  line-height: 1.9;
+  color: var(--color-text-main);
+}
+
+.prose h1 { @apply text-3xl font-bold mt-10 mb-4 text-text-main; }
+.prose h2 { @apply text-2xl font-bold mt-8 mb-3 text-text-main border-b border-gray-200 pb-2; }
+.prose h3 { @apply text-xl font-bold mt-6 mb-2 text-text-main; }
+.prose h4 { @apply text-lg font-semibold mt-4 mb-2; }
+
+.prose p  { @apply mb-5 leading-relaxed; }
+.prose a  { @apply text-accent underline-offset-2 hover:text-accent-2 transition-colors duration-200; }
+
+.prose ul { @apply list-disc list-inside mb-5 space-y-1; }
+.prose ol { @apply list-decimal list-inside mb-5 space-y-1; }
+.prose li { @apply leading-relaxed; }
+
+.prose blockquote {
+  @apply border-l-4 border-accent-2 pl-4 py-1 my-6 bg-bg-alt rounded-r-lg;
+  color: var(--color-text-muted);
+}
+
+.prose code {
+  @apply bg-gray-100 rounded px-1.5 py-0.5 text-sm;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--color-accent);
+}
+
+.prose pre {
+  @apply rounded-xl p-5 my-6 overflow-x-auto;
+  background: #1e1e2e !important;
+}
+
+.prose pre code {
+  @apply bg-transparent text-sm p-0;
+  color: inherit;
+}
+
+.prose table { @apply w-full border-collapse my-6; }
+.prose th { @apply border border-gray-200 px-4 py-2 bg-bg-alt font-semibold text-left; }
+.prose td { @apply border border-gray-200 px-4 py-2; }
+
+.prose img { @apply rounded-xl my-6 w-full; }
+.prose hr { @apply border-gray-200 my-10; }

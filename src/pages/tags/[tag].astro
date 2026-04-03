@@ -1,0 +1,39 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import ArticleCard from '@/components/ui/ArticleCard.astro';
+import { getAllPosts, getAllTags } from '@/utils/content';
+
+export async function getStaticPaths() {
+  const tags = await getAllTags();
+  const all  = await getAllPosts();
+
+  return tags.map(tag => ({
+    params: { tag },
+    props: {
+      posts: all.filter(p => p.data.tags.includes(tag)),
+    },
+  }));
+}
+
+const { tag }   = Astro.params;
+const { posts } = Astro.props;
+---
+
+<PageLayout
+  title={`#${tag}`}
+  heading={`#${tag}`}
+  subheading={`${posts.length}件の記事`}
+>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {posts.map(post => (
+      <ArticleCard
+        title={post.data.title}
+        summary={post.data.summary}
+        date={post.data.date}
+        tags={post.data.tags}
+        href={`/${post.collection}/${post.slug}`}
+        category={post.collection}
+      />
+    ))}
+  </div>
+</PageLayout>

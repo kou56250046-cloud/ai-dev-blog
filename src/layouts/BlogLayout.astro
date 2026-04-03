@@ -1,0 +1,58 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import TagBadge from '@/components/ui/TagBadge.astro';
+import { formatDate } from '@/utils/date';
+
+interface Props {
+  title:      string;
+  date:       Date;
+  updatedAt?: Date;
+  tags:       string[];
+  summary:    string;
+  category:   string;
+}
+
+const { title, date, updatedAt, tags, summary, category } = Astro.props;
+---
+
+<BaseLayout title={title} description={summary}>
+  <article class="max-w-3xl mx-auto px-6 py-16">
+    <!-- ヘッダー -->
+    <header class="mb-12">
+      <div class="flex items-center gap-2 text-sm text-text-muted mb-4">
+        <a href={`/${category}`} class="hover:text-accent transition-colors capitalize">{category}</a>
+        <span>›</span>
+        <time datetime={date.toISOString()}>{formatDate(date)}</time>
+        {updatedAt && (
+          <span class="text-xs bg-gray-100 px-2 py-0.5 rounded-full">
+            更新: {formatDate(updatedAt)}
+          </span>
+        )}
+      </div>
+
+      <h1 class="text-3xl md:text-4xl font-bold leading-tight text-text-main mb-6">
+        {title}
+      </h1>
+
+      <p class="text-lg text-text-muted leading-relaxed mb-6">{summary}</p>
+
+      <div class="flex flex-wrap gap-2">
+        {tags.map(tag => <TagBadge tag={tag} />)}
+      </div>
+    </header>
+
+    <!-- 本文 -->
+    <div class="prose">
+      <slot />
+    </div>
+
+    <!-- フッターナビ -->
+    <div class="mt-16 pt-8 border-t border-gray-100">
+      <a href="/blog" class="text-sm text-accent hover:underline">← 記事一覧へ戻る</a>
+    </div>
+  </article>
+</BaseLayout>
+
+<style is:global>
+  @import '../styles/prose.css';
+</style>

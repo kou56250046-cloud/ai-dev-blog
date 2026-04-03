@@ -1,0 +1,76 @@
+---
+const navLinks = [
+  { href: '/blog',       label: 'ブログ' },
+  { href: '/cheatsheet', label: 'チートシート' },
+  { href: '/snippets',   label: 'スニペット' },
+  { href: '/design',     label: '設計メモ' },
+  { href: '/roadmap',    label: 'ロードマップ' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+  <nav class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-2 font-heading font-bold text-xl text-text-main hover:text-accent transition-colors">
+      <span class="text-2xl">⚡</span>
+      <span>AI Dev Blog</span>
+    </a>
+
+    <ul class="hidden md:flex items-center gap-1">
+      {navLinks.map(({ href, label }) => (
+        <li>
+          <a
+            href={href}
+            class:list={[
+              'px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200',
+              currentPath.startsWith(href)
+                ? 'bg-accent/10 text-accent'
+                : 'text-text-muted hover:text-text-main hover:bg-gray-100'
+            ]}
+          >
+            {label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <!-- モバイルメニューボタン -->
+    <button
+      id="menu-toggle"
+      class="md:hidden p-2 rounded-lg text-text-muted hover:bg-gray-100 transition-colors"
+      aria-label="メニューを開く"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </nav>
+
+  <!-- モバイルメニュー -->
+  <div id="mobile-menu" class="md:hidden hidden border-t border-gray-100 bg-white px-6 py-4">
+    <ul class="flex flex-col gap-2">
+      {navLinks.map(({ href, label }) => (
+        <li>
+          <a
+            href={href}
+            class:list={[
+              'block px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200',
+              currentPath.startsWith(href)
+                ? 'bg-accent/10 text-accent'
+                : 'text-text-muted hover:text-text-main hover:bg-gray-100'
+            ]}
+          >
+            {label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const menu   = document.getElementById('mobile-menu');
+  toggle?.addEventListener('click', () => menu?.classList.toggle('hidden'));
+</script>

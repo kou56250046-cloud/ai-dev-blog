@@ -1,0 +1,47 @@
+---
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+import '@/styles/global.css';
+
+interface Props {
+  title:       string;
+  description?: string;
+  ogImage?:    string;
+}
+
+const {
+  title,
+  description = 'AI駆動開発（Claude Code / Devin / GitHub等）の学習内容を体系的に記録・閲覧するためのナレッジベース。',
+  ogImage = '/og-image.png',
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://localhost:4321');
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalURL} />
+
+    <title>{title} | AI Dev Blog</title>
+    <meta name="description" content={description} />
+
+    <!-- OGP -->
+    <meta property="og:type"        content="website" />
+    <meta property="og:url"         content={canonicalURL} />
+    <meta property="og:title"       content={`${title} | AI Dev Blog`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image"       content={ogImage} />
+    <meta name="twitter:card"       content="summary_large_image" />
+  </head>
+  <body>
+    <Header />
+    <main class="pt-16">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

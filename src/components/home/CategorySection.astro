@@ -1,0 +1,38 @@
+---
+import { categoryMeta } from '@/utils/content';
+
+const categories = [
+  { slug: 'blog',       href: '/blog'       },
+  { slug: 'cheatsheet', href: '/cheatsheet' },
+  { slug: 'snippet',    href: '/snippets'   },
+  { slug: 'design',     href: '/design'     },
+  { slug: 'roadmap',    href: '/roadmap'    },
+];
+---
+
+<section class="py-24" style="background: var(--gradient-bg)">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-16">
+      <p class="text-sm text-accent font-medium mb-2">CATEGORIES</p>
+      <h2 class="text-3xl font-bold text-text-main">カテゴリから探す</h2>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      {categories.map(({ slug, href }) => {
+        const meta = categoryMeta[slug];
+        return (
+          <a
+            href={href}
+            class="card text-center hover:border-accent/30 border border-transparent group"
+          >
+            <div class="text-4xl mb-3">{meta.icon}</div>
+            <h3 class="font-bold text-text-main group-hover:text-accent transition-colors mb-1 text-sm">
+              {meta.label}
+            </h3>
+            <p class="text-xs text-text-muted leading-relaxed">{meta.description}</p>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,12 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import HeroSection from '@/components/home/HeroSection.astro';
+import RecentPosts from '@/components/home/RecentPosts.astro';
+import CategorySection from '@/components/home/CategorySection.astro';
+---
+
+<BaseLayout title="ホーム" description="AI駆動開発の学習ナレッジベース。Claude Code・Devin・GitHub等の学習ログ、チートシート、コードスニペットを記録・共有します。">
+  <HeroSection />
+  <RecentPosts />
+  <CategorySection />
+</BaseLayout>
