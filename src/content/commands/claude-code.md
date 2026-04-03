@@ -1,7 +1,7 @@
 ---
-title: "Claude Code コマンドチートシート"
+title: "Claude Code コマンド集"
 date: 2026-04-03
-category: cheatsheet
+category: commands
 tags: [claude-code, cli, tips]
 summary: "Claude Codeでよく使うコマンド・ショートカット・スラッシュコマンドをまとめたリファレンス。"
 draft: false

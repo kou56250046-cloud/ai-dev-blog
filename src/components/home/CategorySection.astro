@@ -2,11 +2,9 @@
 import { categoryMeta } from '@/utils/content';
 
 const categories = [
-  { slug: 'blog',       href: '/blog'       },
-  { slug: 'cheatsheet', href: '/cheatsheet' },
-  { slug: 'snippet',    href: '/snippets'   },
-  { slug: 'design',     href: '/design'     },
-  { slug: 'roadmap',    href: '/roadmap'    },
+  { slug: 'blog',     href: '/blog'     },
+  { slug: 'commands', href: '/commands' },
+  { slug: 'prompts',  href: '/prompts'  },
 ];
 ---
 
@@ -17,7 +15,7 @@ const categories = [
       <h2 class="text-3xl font-bold text-text-main">カテゴリから探す</h2>
     </div>
 
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
       {categories.map(({ slug, href }) => {
         const meta = categoryMeta[slug];
         return (
@@ -26,10 +24,10 @@ const categories = [
             class="card text-center hover:border-accent/30 border border-transparent group"
           >
             <div class="text-4xl mb-3">{meta.icon}</div>
-            <h3 class="font-bold text-text-main group-hover:text-accent transition-colors mb-1 text-sm">
+            <h3 class="font-bold text-text-main group-hover:text-accent transition-colors mb-1">
               {meta.label}
             </h3>
-            <p class="text-xs text-text-muted leading-relaxed">{meta.description}</p>
+            <p class="text-sm text-text-muted leading-relaxed">{meta.description}</p>
           </a>
         );
       })}

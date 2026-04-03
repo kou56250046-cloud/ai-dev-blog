@@ -3,14 +3,14 @@ import PageLayout from '@/layouts/PageLayout.astro';
 import ArticleCard from '@/components/ui/ArticleCard.astro';
 import { getCollection } from 'astro:content';
 
-const posts = (await getCollection('cheatsheet', ({ data }) => !data.draft))
+const posts = (await getCollection('commands', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
 <PageLayout
-  title="チートシート"
-  heading="⚡ チートシート"
-  subheading="コマンド・設定リファレンス"
+  title="コマンド集"
+  heading="⚡ コマンド集"
+  subheading="CLI・設定コマンドリファレンス"
 >
   {posts.length > 0 ? (
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -20,15 +20,15 @@ const posts = (await getCollection('cheatsheet', ({ data }) => !data.draft))
           summary={post.data.summary}
           date={post.data.date}
           tags={post.data.tags}
-          href={`/cheatsheet/${post.slug}`}
-          category="cheatsheet"
+          href={`/commands/${post.slug}`}
+          category="commands"
         />
       ))}
     </div>
   ) : (
     <div class="text-center py-20 text-text-muted">
       <p class="text-5xl mb-4">⚡</p>
-      <p>まだチートシートがありません。</p>
+      <p>まだコマンドがありません。</p>
     </div>
   )}
 </PageLayout>

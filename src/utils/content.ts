@@ -2,20 +2,16 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 
 export type AnyEntry =
   | CollectionEntry<'blog'>
-  | CollectionEntry<'cheatsheet'>
-  | CollectionEntry<'snippets'>
-  | CollectionEntry<'design'>
-  | CollectionEntry<'roadmap'>;
+  | CollectionEntry<'commands'>
+  | CollectionEntry<'prompts'>;
 
 export async function getAllPosts(includeDrafts = false) {
-  const [blog, cheatsheet, snippets, design, roadmap] = await Promise.all([
-    getCollection('blog',       ({ data }) => includeDrafts || !data.draft),
-    getCollection('cheatsheet', ({ data }) => includeDrafts || !data.draft),
-    getCollection('snippets',   ({ data }) => includeDrafts || !data.draft),
-    getCollection('design',     ({ data }) => includeDrafts || !data.draft),
-    getCollection('roadmap',    ({ data }) => includeDrafts || !data.draft),
+  const [blog, commands, prompts] = await Promise.all([
+    getCollection('blog',     ({ data }) => includeDrafts || !data.draft),
+    getCollection('commands', ({ data }) => includeDrafts || !data.draft),
+    getCollection('prompts',  ({ data }) => includeDrafts || !data.draft),
   ]);
-  return [...blog, ...cheatsheet, ...snippets, ...design, ...roadmap]
+  return [...blog, ...commands, ...prompts]
     .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 }
 
@@ -32,9 +28,7 @@ export async function getAllTags(): Promise<string[]> {
 }
 
 export const categoryMeta: Record<string, { label: string; icon: string; description: string }> = {
-  blog:       { label: 'ブログ記事',     icon: '📝', description: '学習ログ・気づき・ツール比較' },
-  cheatsheet: { label: 'チートシート',   icon: '⚡', description: 'コマンド・設定リファレンス' },
-  snippet:    { label: 'スニペット',     icon: '🧩', description: '再利用可能なコード片' },
-  design:     { label: '設計メモ',       icon: '🏗️', description: 'アーキテクチャ・要件定義' },
-  roadmap:    { label: 'ロードマップ',   icon: '🗺️', description: '学習進捗管理' },
+  blog:     { label: 'ブログ記事',   icon: '📝', description: '学習ログ・気づき・ツール比較' },
+  commands: { label: 'コマンド集',   icon: '⚡', description: 'CLI・設定コマンドリファレンス' },
+  prompts:  { label: 'プロンプト集', icon: '💬', description: 'AI活用の定番プロンプト' },
 };

@@ -3,14 +3,14 @@ import PageLayout from '@/layouts/PageLayout.astro';
 import ArticleCard from '@/components/ui/ArticleCard.astro';
 import { getCollection } from 'astro:content';
 
-const posts = (await getCollection('design', ({ data }) => !data.draft))
+const posts = (await getCollection('prompts', ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 
 <PageLayout
-  title="設計メモ"
-  heading="🏗️ 設計メモ"
-  subheading="アーキテクチャ・要件定義"
+  title="プロンプト集"
+  heading="💬 プロンプト集"
+  subheading="AI活用の定番プロンプト"
 >
   {posts.length > 0 ? (
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -20,15 +20,15 @@ const posts = (await getCollection('design', ({ data }) => !data.draft))
           summary={post.data.summary}
           date={post.data.date}
           tags={post.data.tags}
-          href={`/design/${post.slug}`}
-          category="design"
+          href={`/prompts/${post.slug}`}
+          category="prompts"
         />
       ))}
     </div>
   ) : (
     <div class="text-center py-20 text-text-muted">
-      <p class="text-5xl mb-4">🏗️</p>
-      <p>まだ設計メモがありません。</p>
+      <p class="text-5xl mb-4">💬</p>
+      <p>まだプロンプトがありません。</p>
     </div>
   )}
 </PageLayout>

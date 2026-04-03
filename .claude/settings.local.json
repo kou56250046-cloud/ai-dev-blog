@@ -6,7 +6,13 @@
       "Bash(npm install:*)",
       "Bash(export PATH=\"$HOME/AppData/Roaming/npm:$PATH\")",
       "Bash(echo \"EXIT: $?\")",
-      "Bash(npx astro:*)"
+      "Bash(npx astro:*)",
+      "Bash(rm -rf src/content/snippets src/content/design src/content/roadmap src/pages/snippets src/pages/design src/pages/roadmap.astro)",
+      "Bash(mkdir -p src/content/commands src/content/prompts src/pages/commands src/pages/prompts)",
+      "Bash(mv src/content/cheatsheet/claude-code.md src/content/commands/claude-code.md)",
+      "Bash(rm -rf src/content/cheatsheet src/pages/cheatsheet)",
+      "Bash(node node_modules/.bin/astro build)",
+      "Bash(npx --no astro build)"
     ]
   }
 }
