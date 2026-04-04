@@ -1,0 +1,235 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { categoryMeta } from '@/utils/content';
+---
+
+<BaseLayout title="検索" description="記事をキーワードで検索できます">
+  <div class="max-w-4xl mx-auto px-6 py-16">
+    <h1 class="text-3xl font-bold text-text-main mb-2">記事を検索</h1>
+    <p class="text-text-muted mb-8">キーワード・タグ・カテゴリで絞り込めます</p>
+
+    <!-- 検索フォーム -->
+    <div class="relative mb-6">
+      <span class="absolute inset-y-0 left-4 flex items-center text-text-muted pointer-events-none">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+        </svg>
+      </span>
+      <input
+        id="search-input"
+        type="search"
+        placeholder="キーワードを入力... (例: claude-code, mcp, setup)"
+        class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-white text-text-main placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent transition-all text-base"
+        autocomplete="off"
+      />
+    </div>
+
+    <!-- カテゴリフィルター -->
+    <div class="flex flex-wrap gap-2 mb-8" id="category-filters">
+      <button
+        class="filter-btn active px-4 py-1.5 rounded-full text-sm font-medium border transition-all"
+        data-category="all"
+      >
+        すべて
+      </button>
+      {Object.entries(categoryMeta).map(([key, meta]) => (
+        <button
+          class="filter-btn px-4 py-1.5 rounded-full text-sm font-medium border transition-all"
+          data-category={key}
+        >
+          {meta.icon} {meta.label}
+        </button>
+      ))}
+    </div>
+
+    <!-- 検索結果カウント -->
+    <p id="result-count" class="text-sm text-text-muted mb-4 hidden">
+      <span id="count-num">0</span> 件見つかりました
+    </p>
+
+    <!-- 検索結果リスト -->
+    <div id="results" class="space-y-4"></div>
+
+    <!-- 初期メッセージ -->
+    <div id="initial-msg" class="text-center py-16 text-text-muted">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto mb-4 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+      </svg>
+      <p>キーワードを入力して検索してください</p>
+    </div>
+
+    <!-- 結果なしメッセージ -->
+    <div id="no-results" class="hidden text-center py-16 text-text-muted">
+      <p class="text-lg mb-2">記事が見つかりませんでした</p>
+      <p class="text-sm">別のキーワードやカテゴリをお試しください</p>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .filter-btn {
+    color: var(--color-text-muted);
+    border-color: #e5e7eb;
+    background: white;
+  }
+  .filter-btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+  .filter-btn.active {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: white;
+  }
+  .result-card {
+    animation: fadeIn 0.15s ease-out both;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  mark {
+    background: #EEF2FF;
+    color: var(--color-accent);
+    border-radius: 2px;
+    padding: 0 2px;
+  }
+</style>
+
+<script>
+  interface SearchEntry {
+    title:    string;
+    summary:  string;
+    tags:     string[];
+    category: string;
+    date:     string;
+    url:      string;
+  }
+
+  const categoryLabel: Record<string, string> = {
+    blog:     'ブログ記事',
+    commands: 'コマンド集',
+    prompts:  'プロンプト集',
+  };
+
+  let allEntries: SearchEntry[] = [];
+  let currentCategory = 'all';
+  let currentQuery    = '';
+
+  // --- データ取得 ---
+  async function loadIndex() {
+    const res = await fetch('/search.json');
+    allEntries = await res.json();
+    // URLからクエリを復元
+    const params = new URLSearchParams(location.search);
+    const q = params.get('q') ?? '';
+    if (q) {
+      (document.getElementById('search-input') as HTMLInputElement).value = q;
+      currentQuery = q;
+      render();
+    }
+  }
+
+  // --- ハイライト ---
+  function highlight(text: string, query: string): string {
+    if (!query) return text;
+    const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp(`(${escaped})`, 'gi');
+    return text.replace(re, '<mark>$1</mark>');
+  }
+
+  // --- フィルタリング ---
+  function filter(): SearchEntry[] {
+    const q = currentQuery.toLowerCase().trim();
+    return allEntries.filter((e) => {
+      if (currentCategory !== 'all' && e.category !== currentCategory) return false;
+      if (!q) return true;
+      return (
+        e.title.toLowerCase().includes(q)   ||
+        e.summary.toLowerCase().includes(q) ||
+        e.tags.some(t => t.toLowerCase().includes(q))
+      );
+    });
+  }
+
+  // --- レンダリング ---
+  function render() {
+    const results   = filter();
+    const resultEl  = document.getElementById('results')!;
+    const countEl   = document.getElementById('result-count')!;
+    const countNum  = document.getElementById('count-num')!;
+    const noResults = document.getElementById('no-results')!;
+    const initialMsg= document.getElementById('initial-msg')!;
+
+    initialMsg.classList.add('hidden');
+
+    if (!currentQuery && currentCategory === 'all') {
+      initialMsg.classList.remove('hidden');
+      resultEl.innerHTML = '';
+      countEl.classList.add('hidden');
+      noResults.classList.add('hidden');
+      return;
+    }
+
+    countEl.classList.remove('hidden');
+    countNum.textContent = String(results.length);
+
+    if (results.length === 0) {
+      noResults.classList.remove('hidden');
+      resultEl.innerHTML = '';
+      return;
+    }
+
+    noResults.classList.add('hidden');
+    resultEl.innerHTML = results.map((e, i) => `
+      <a
+        href="${e.url}"
+        class="result-card block p-5 rounded-xl border border-gray-100 bg-white hover:border-accent/40 hover:shadow-md transition-all"
+        style="animation-delay: ${i * 0.04}s"
+      >
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-accent/10 text-accent">
+            ${categoryLabel[e.category] ?? e.category}
+          </span>
+          <span class="text-xs text-text-muted">${e.date}</span>
+        </div>
+        <h2 class="font-bold text-text-main mb-1 leading-snug">
+          ${highlight(e.title, currentQuery)}
+        </h2>
+        <p class="text-sm text-text-muted line-clamp-2 mb-3">
+          ${highlight(e.summary, currentQuery)}
+        </p>
+        <div class="flex flex-wrap gap-1">
+          ${e.tags.map(t => `
+            <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-text-muted">
+              #${highlight(t, currentQuery)}
+            </span>
+          `).join('')}
+        </div>
+      </a>
+    `).join('');
+
+    // URLにクエリを反映
+    const url = new URL(location.href);
+    if (currentQuery) url.searchParams.set('q', currentQuery);
+    else url.searchParams.delete('q');
+    history.replaceState(null, '', url.toString());
+  }
+
+  // --- イベント ---
+  document.getElementById('search-input')!.addEventListener('input', (e) => {
+    currentQuery = (e.target as HTMLInputElement).value;
+    render();
+  });
+
+  document.getElementById('category-filters')!.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest('[data-category]') as HTMLElement | null;
+    if (!btn) return;
+    currentCategory = btn.dataset.category!;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    render();
+  });
+
+  loadIndex();
+</script>
